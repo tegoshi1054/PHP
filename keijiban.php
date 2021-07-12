@@ -1,8 +1,4 @@
 <?php
-// session_start();
-// $session_id = session_id();
-
-// $session_sql = $session_id;
 
 // pdoを使ったデータベース接続
 $dns = 'mysql:dbname=morijyobi; host=localhost';

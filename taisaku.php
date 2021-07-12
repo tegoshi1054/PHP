@@ -1,17 +1,24 @@
 <?php
+// HTMLから取得した値をPOSTで受け取る
 $useename = $_POST['username'];
 $password = $_POST['password'];
 
+// tyr catch メインの処理と例外の処理をする
 try{
+  // 　SQLインジェクションの例外処理をする
     $opt = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::MYSQL_ATTR_MULTI_STATEMENTS => false,
                         PDO::ATTR_EMULATE_PREPARES => false);
+    // データベースに接続
     $db = new PDO('mysql:dbname=morijyobi; host=localhost', 'user01', 'morijyobi',$opt);
+    // パスワードとユーザーネームが一致sqlを格納
     $sql = "SELECT * FROM users WHERE username = ? AND password = ?";
     $ps = $db->prepare($sql);
+    // bindValueでバインドする
     $ps->bindValue(1,$useename,PDO::PARAM_STR);
     $ps->bindValue(2,$password,PDO::PARAM_STR);
     $ps->execute();
+    // パスワードとユーザー名が一致したら掲示板に飛ぶ
     if ($ps->rowCount() > 0){
         header('location: http://localhost/WEB/keijiban.php');
     }else{
