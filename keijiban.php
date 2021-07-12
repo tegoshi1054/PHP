@@ -1,8 +1,8 @@
 <?php
-session_start();
-$session_id = session_id();
+// session_start();
+// $session_id = session_id();
 
-$session_sql = $session_id;
+// $session_sql = $session_id;
 
 // pdoを使ったデータベース接続
 $dns = 'mysql:dbname=morijyobi; host=localhost';
@@ -27,14 +27,14 @@ try{
 }
 
 // POSTで受け取ったデータをDBに登録
-$sqpl = "INSERT INTO keijiban (name,comment,date,session)
-            VALUES (:name,:comment,:date,:session)" ;
+$sqpl = "INSERT INTO keijiban (name,comment,date)
+            VALUES (:name,:comment,:date)" ;
 $stmt = $dns->prepare($sqpl);
 
 if ($_POST['name'] === "" && $_POST['comment'] === ""){
     $akb48 = '名前を入力してください';
 }else{
-    $params = array(':name' => $_POST['name'],':comment' => $_POST['comment'],':date' => $date,'session'=>$session_sql);
+    $params = array(':name' => $_POST['name'],':comment' => $_POST['comment'],':date' => $date);
     $stmt->execute($params);
 
 }
@@ -66,10 +66,10 @@ if ($_POST['name'] === "" && $_POST['comment'] === ""){
 ?>
     <body>
     <!-- 入力フォーム -->
-        <form method="post" action="">
+        <form method="post" action="keijiban.php">
             <input type="text" name="name" value="" placeholder="名前" class="box3"/><br><br>
-            <textarea name="comment" rows="4" cols="20" placeholder="コメント内容" class="box3"></textarea><br><br>
-           <input type="submit" name="send" value="書き込む" />
+            <textarea name="comment" placeholder="コメント内容" class="box4"></textarea><br><br>
+           <input type="submit" name="send" value="書き込む" class="button" />
         </form>
         
 

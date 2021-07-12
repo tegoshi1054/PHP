@@ -26,7 +26,7 @@ try{
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>脆弱性ログインページ</title>
+<title>正規のログインページ</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -45,3 +45,9 @@ try{
 </div>
 </body>
 </html>
+
+<!-- 
+git remote add origin https://github.com/tegoshi1054/PHP.git
+git branch -M main
+git push -u origin main
+ -->

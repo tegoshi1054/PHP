@@ -1,0 +1,38 @@
+掲示板を用いたSQLインジェクション攻撃の説明
+
+実行環境
+：XAMPP(Apach,MySQL)
+
+概要：
+ログイン機能を搭載した掲示板の作成
+※ユーザーはあらかじめ作成したことを前提とする
+１ name:morijyobiuser,pass:morijyobi
+２ name:hiroyuki,pass:yametemoratteiisuka
+３ name:karasawa,pass:strognetworklawyer
+
+データベースの仕様：
+テーブル名：keijiban(掲示板のDB)
++-----+------------------+-----------+------------------------+----------------------------+
+| id　  | name               | comment | date                        | session                          |
++-----+------------------+-----------+------------------------+----------------------------+
+テーブル名：users(ログインのDB)
++----+---------------+-----------+
+| id   | username     | password |
++----+---------------+-----------+
+データベースのID番号のリセット方法
+DELETE FROM [テーブル名]　WHERE [条件];
+DELETE FROM [テーブル名]　WHERE name IS NULL;
+ALTER TABLE keijiban auto_increment　=1:
+
+ログインの詳細：
+データベースに接続し、ユーザー名とパスワードを照合する。
+ユーザー名とパスワードが完全一致で掲示板サイトにログインできる
+
+掲示板の詳細：
+名前とコメントを入力できるフォームをHTMLで記述する
+POSTを使い、DBに情報を格納する。
+標示される投稿をCSSで装飾する
+
+
+PowerPoint：
+テーマ＝水曜日のダウンタウン風のデザイン
