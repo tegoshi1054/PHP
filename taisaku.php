@@ -19,6 +19,8 @@ try{
     $ps->bindValue(2,$password,PDO::PARAM_STR);
     $ps->execute();
     // パスワードとユーザー名が一致したら掲示板に飛ぶ
+    // rowCount()　$sqlのSQｌ文に一致した行数を格納する関数。
+    // もし一致した場合、０よりも大きくなるので、掲示板に飛ぶ仕様になっている。
     if ($ps->rowCount() > 0){
         header('location: http://localhost/WEB/keijiban.php');
     }else{
@@ -37,7 +39,7 @@ try{
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>脆弱性ログインページ</h1>
+<h1>正規のログインページ</h1>
 <div class="message"></div>
 <div class="loginform">
   <form action="taisaku.php" method="post">

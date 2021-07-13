@@ -1,9 +1,5 @@
 <?php
-
-// pdoを使ったデータベース接続
-$dns = 'mysql:dbname=morijyobi; host=localhost';
-$username = 'user01';
-$password = 'morijyobi';
+// SQLインジェクションを起こすために、脆弱性大にしてます。
 
 // 日付を設定
 $week = array( "日", "月", "火", "水", "木", "金", "土" );
@@ -13,7 +9,11 @@ date_default_timezone_set('Asia/Tokyo');
 // date()関数を使用した表示。"w"オプションで配列から曜日を取得
 $date = date($format1).$week[date('w')].date($format2);
 
-// データベースに接続できるかの確認
+
+// PDOでデータベース接続
+$dns = 'mysql:dbname=morijyobi; host=localhost';
+$username = 'user01';
+$password = 'morijyobi';
 try{
     $dns = new PDO($dns,$username,$password);
     echo "接続成功";
@@ -22,17 +22,17 @@ try{
     exit();
 }
 
+// HTMLから値をPOSTで取得
+$name = $_POST['name'];
+$comment = $_POST['comment'];
+
 // POSTで受け取ったデータをDBに登録
 $sqpl = "INSERT INTO keijiban (name,comment,date)
-            VALUES (:name,:comment,:date)" ;
-$stmt = $dns->prepare($sqpl);
+            VALUES ('$name','$comment','$date')" ;
+$stmt = $dns->query($sqpl);
 
 if ($_POST['name'] === "" && $_POST['comment'] === ""){
     $akb48 = '名前を入力してください';
-}else{
-    $params = array(':name' => $_POST['name'],':comment' => $_POST['comment'],':date' => $date);
-    $stmt->execute($params);
-
 }
 // $params = array(':name' => $_POST['name'],':comment' => $_POST['comment'],':date' => $date,'session'=>$session_sql);
 // $stmt->execute($params);
@@ -57,7 +57,6 @@ if ($_POST['name'] === "" && $_POST['comment'] === ""){
         echo $a['comment'].'<br>';
         echo "</div>";
     }
-    
 
 ?>
     <body>
@@ -82,3 +81,7 @@ if ($_POST['name'] === "" && $_POST['comment'] === ""){
 DELETE FROM [テーブル名]　WHERE [条件];
 DELETE FROM [テーブル名]　WHERE name IS NULL;
 ALTER TABLE keijiban auto_increment　=1:
+
+
+xammpアクセス方法
+http://localhost/WEB/taisaku.php
