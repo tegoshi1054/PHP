@@ -38,6 +38,10 @@
     font-size: 1em;          /* 文字サイズ */
     line-height: 1.2;        /* 行の高さ */
 }
+.box5 {
+    width: 30em; 
+    border: 2px solid #0a0;
+}
 
 .button {
     display       : inline-block;

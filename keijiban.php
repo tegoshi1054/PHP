@@ -9,34 +9,31 @@ date_default_timezone_set('Asia/Tokyo');
 // date()関数を使用した表示。"w"オプションで配列から曜日を取得
 $date = date($format1).$week[date('w')].date($format2);
 
-
-// PDOでデータベース接続
-$dns = 'mysql:dbname=morijyobi; host=localhost';
-$username = 'user01';
-$password = 'morijyobi';
-try{
-    $dns = new PDO($dns,$username,$password);
-    echo "接続成功";
-} catch(PDOException $e){
-    echo "失敗:" . $e->getMessage()."/n";
-    exit();
+// 名前とコメントに何も値が入っていなければ、何もしない
+if ($_POST['name'] == "" && $_POST['comment'] == "") {
+    
+    // 名前とコメントに値が入っていた場合、データベースに接続する処理を行う
+} else {
+    $dns = 'mysql:dbname=morijyobi; host=localhost';
+    $username = 'user01';
+    $password = 'morijyobi';
+    try{
+        $dns = new PDO($dns,$username,$password);
+            // HTMLから値をPOSTで取得
+        $name = $_POST['name'];
+        $comment = $_POST['comment'];
+        $email = $_POST['email'];
+        // POSTで受け取ったデータをDBに登録
+        $sqpl = "INSERT INTO keijiban (name,comment,date,email)
+                    VALUES ('$name','$comment','$date','$email')";
+        $sql2 = $email;
+        $stmt = $dns->query($sqpl);
+        $stm = $dns->query($sql2);
+    } catch(PDOException $e){
+        echo "失敗:" . $e->getMessage()."/n";
+        exit();
+    }
 }
-
-// HTMLから値をPOSTで取得
-$name = $_POST['name'];
-$comment = $_POST['comment'];
-
-// POSTで受け取ったデータをDBに登録
-$sqpl = "INSERT INTO keijiban (name,comment,date)
-            VALUES ('$name','$comment','$date')" ;
-$stmt = $dns->query($sqpl);
-
-if ($_POST['name'] === "" && $_POST['comment'] === ""){
-    $akb48 = '名前を入力してください';
-}
-// $params = array(':name' => $_POST['name'],':comment' => $_POST['comment'],':date' => $date,'session'=>$session_sql);
-// $stmt->execute($params);
-
 ?>
  
 <!-- ここからHTMLの記述 -->
@@ -44,6 +41,7 @@ if ($_POST['name'] === "" && $_POST['comment'] === ""){
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>盛ジョビ掲示板</title>
     </head>
     <h1>盛ジョビ掲示板</h1>
     <!-- CSSの読み込み -->
@@ -51,19 +49,25 @@ if ($_POST['name'] === "" && $_POST['comment'] === ""){
 <!-- ここに、書き込まれたデータを表示する -->
 <?php
     $SQL= 'SELECT id,name,date,comment FROM keijiban';
-    foreach ($dns->query($SQL) as $a){
-        echo "<div class=box>";
-        echo '<div class=bold>'.$a['id'].' '."名前：".'<div class=name>'.$a['name'].'</div>'.' '.$a['date'].'</div>'.'<br>';
-        echo $a['comment'].'<br>';
-        echo "</div>";
-    }
 
+    if($_POST['name'] == "" && $_POST['comment'] == ""){
+        echo 'コメントを入力してください';
+    }else{
+        foreach ($dns->query($SQL) as $a){
+            echo "<div class=box>";
+            echo '<div class=bold>'.$a['id'].' '."名前：".'<div class=name>'.$a['name'].'</div>'.' '.$a['date'].'</div>'.'<br>';
+            echo $a['comment'].'<br>';
+            echo "</div>";
+        }
+    }
 ?>
     <body>
     <!-- 入力フォーム -->
         <form method="post" action="keijiban.php">
             <input type="text" name="name" value="" placeholder="名前" class="box3"/><br><br>
-            <textarea name="comment" placeholder="コメント内容" class="box4"></textarea><br><br>
+            <textarea name="comment" placeholder="コメント内容" class="box4"></textarea><br>
+            <p>メールアドレスは任意です</p>
+            <input type="text" name="email"  placeholder="メールアドレスを入力してください" class="box5"></textarea><br><br>
            <input type="submit" name="send" value="書き込む" class="button" />
         </form>
         

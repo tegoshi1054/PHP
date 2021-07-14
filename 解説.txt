@@ -13,20 +13,21 @@
 データベースの仕様：
 テーブル名：keijiban(掲示板のDB)
 +-----+------------------+-----------+------------------------+----------------------------+
-| id　  | name               | comment | date                        | session                          |
+| id　  | name               | comment | date                         | email                            |
 +-----+------------------+-----------+------------------------+----------------------------+
 テーブル名：users(ログインのDB)
 +----+---------------+-----------+
 | id   | username     | password |
 +----+---------------+-----------+
 データベースのID番号のリセット方法
-DELETE FROM [テーブル名]　WHERE [条件];
-DELETE FROM [テーブル名]　WHERE name IS NULL;
-ALTER TABLE keijiban auto_increment　=1:
+ALTER TABLE keijiban auto_increment = 1;
+
 
 ログインの詳細：
 データベースに接続し、ユーザー名とパスワードを照合する。
 ユーザー名とパスワードが完全一致で掲示板サイトにログインできる
+ex)username = user01
+     password = morijyobi
 
 掲示板の詳細：
 名前とコメントを入力できるフォームをHTMLで記述する
@@ -36,3 +37,20 @@ POSTを使い、DBに情報を格納する。
 
 PowerPoint：
 テーマ＝水曜日のダウンタウン風のデザイン
+
+実演：
+正規のログインページと不正ログインページを表示する
+user01,morijyobi
+kim,northkoreaでログイン
+書き込みしたら掲示板が表示される
+name:十二芒星の破壊者
+comment:これが...一億年ボタンか....俺はここから抜け出さなければいけないんだ...なぁ教えてくれ。
+               どうすれば...時間が進むんだ...。このままだと俺が俺じゃなくなる。
+さらに、掲示板の内容を削除する
+
+
+使用するSQLインジェクションコード
+↓掲示板の書き込みをすべて削除
+SELECT * FROM keijiban WHERE comment ='' AND name ='';DELETE FROM keijiban WHERE 'A'='A'
+↓ログインページの不正ログイン
+' OR 'a'='a
