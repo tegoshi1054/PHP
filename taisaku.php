@@ -22,7 +22,7 @@ try{
     // rowCount()　$sqlのSQｌ文に一致した行数を格納する関数。
     // もし一致した場合、０よりも大きくなるので、掲示板に飛ぶ仕様になっている。
     if ($ps->rowCount() > 0){
-        header('location: http://localhost/WEB/keijiban.php');
+        header('location: http://localhost/WEB/zeijyakukeijiban.php');
     }else{
         echo '正しいパスワードと名前を入力してください';
     }
